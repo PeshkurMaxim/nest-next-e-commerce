@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -10,6 +10,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @InjectDataSource() private dataSource: DataSource,
   ) {}
 
   create(createProductDto: CreateProductDto) {
@@ -25,7 +26,13 @@ export class ProductsService {
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+    return this.dataSource
+      .createQueryBuilder()
+      .update(Product)
+      .set(updateProductDto)
+      .where('id = :id', { id })
+      .execute();
+    // return this.productRepository.update(id, updateProductDto);
   }
 
   remove(id: number) {

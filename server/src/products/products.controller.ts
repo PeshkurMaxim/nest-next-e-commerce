@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -23,7 +25,7 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.productsService.findAll();
   }
 

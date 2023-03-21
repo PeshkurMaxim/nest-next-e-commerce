@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
@@ -23,7 +24,7 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.categoriesService.findAll();
   }
 
