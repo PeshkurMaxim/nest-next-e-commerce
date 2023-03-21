@@ -1,0 +1,12 @@
+.form ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #d8d8d8;
+}
+.form ul li {
+    border: 1px solid #d8d8d8;
+    border-width: 0px 1px;
+    padding: 10px;
+    cursor: pointer;
+}

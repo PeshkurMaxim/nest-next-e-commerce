@@ -1,0 +1,36 @@
+.container {
+    border-radius: 5px;
+    padding: 10px;
+    width: fit-content;
+    display: flex;
+    gap: 15px;
+    animation: 1s show ease;
+}
+.success {
+    composes: container;
+    background: var(--success-color);
+    color: #fff;
+}
+.info {
+    composes: container;
+    background: var(--info-color);
+    color: #fff;
+}
+.warning {
+    composes: container;
+    background: var(--warning-color);
+    color: #fff;
+}
+.error {
+    composes: container;
+    background: var(--error-color);
+    color: #fff;
+}
+.title {
+    font-weight: 500;
+    font-size: 1.25rem;
+}
+@keyframes show {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

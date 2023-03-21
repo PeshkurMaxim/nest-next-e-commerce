@@ -1,0 +1,19 @@
+.table {
+    width: 100%;
+    border: 1px solid #ddd;
+    table-layout: auto;
+}
+.table thead tr td {
+    vertical-align: middle;
+    text-align: center;
+}
+.table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+}
+.table td.drawActions {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border: none;
+}

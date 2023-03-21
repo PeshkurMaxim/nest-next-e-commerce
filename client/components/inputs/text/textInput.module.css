@@ -1,0 +1,29 @@
+.input {
+    background: #FFFFFF;
+    border: 1px solid #d8d8d8;
+    border-radius: 5px;
+    padding: 14px;
+    font-size: 14px;
+    height: 40px;
+}
+.input:focus + label, .input:not(:placeholder-shown) + label {
+    font-size: 12px;
+    top: 0;
+    display: -webkit-flex;
+    display: flex;
+}
+.label {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 14px;
+    left: 9px;
+    color: #9a9da2;
+    font-weight: 400;
+    pointer-events: none;
+    transition: all .2s;
+    padding: 0 4px;
+    background-color: #fff;
+    border-radius: 4px;
+}

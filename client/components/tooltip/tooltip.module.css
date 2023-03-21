@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.tooltip_container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    bottom: 0;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    top: -2.5rem;
+    transition-duration: 300ms;
+    transform: scale(0);
+}
+.container:hover .tooltip_container {
+    transform: scale(1);
+}
+.tooltip_container__text {
+    position: relative;
+    z-index: 10;
+    padding: 0.5rem;
+    line-height: 1;
+    color: #fff;
+    background-color: rgb(55 65 81);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1;
+}
+.tooltip_container__triangle {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-top: -0.5rem;
+    transform: rotate(45deg);
+    padding: 0.25rem 0.5rem;
+    background-color: rgb(55 65 81);
+}
