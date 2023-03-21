@@ -1,10 +1,8 @@
-import type { NextPage } from "next";
-import dynamic from "next/dynamic";
+import Layout from "@/components/admin/layout";
 
-const App = dynamic(() => import('../../components/admin/App'), { ssr: false });
-
-const Admin: NextPage = () => {
-  return <App />;
-};
-
-export default Admin;
+export default function AdminHome() {
+    return (
+        <Layout/>
+    )
+}
+  
