@@ -2,13 +2,12 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { TypeOrmExceptionFilter } from './common/exceptionsFilters/typeorm-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: '*',
-    exposedHeaders: ['X-Total-Count', 'Content-Range'],
-  });
+
+  app.useGlobalFilters(new TypeOrmExceptionFilter());
 
   const openAPIConfig = new DocumentBuilder()
     .setTitle('Nest Next Shop')

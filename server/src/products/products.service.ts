@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -14,7 +14,8 @@ export class ProductsService {
   ) {}
 
   create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+    const newProduct = this.productRepository.create(createProductDto);
+    return this.productRepository.save(newProduct);
   }
 
   findAll() {
