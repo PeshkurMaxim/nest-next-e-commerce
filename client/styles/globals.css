@@ -1,5 +1,5 @@
 @tailwind base;
-@tailwind components;
+/* @tailwind components; */
 @tailwind utilities;
 :root {
   --max-width: 1100px;
@@ -46,6 +46,7 @@
   --info-color: #0288d1;
   --warning-color: #f57c00;
   --error-color: #d32f2f;
+  --success-hover-color: #338033;
 
 }
 /* 
@@ -105,6 +106,13 @@ a {
 input:focus-visible {
   outline: none;
 }
+h1 {
+  font-size: 28px;
+  line-height: 34px;
+  padding-top: 0;
+}
+@import 'buttons.css';
+
 /* 
 @media (prefers-color-scheme: dark) {
   html {

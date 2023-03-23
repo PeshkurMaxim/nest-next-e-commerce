@@ -11,6 +11,7 @@ import Alert from "@/components/alert/alert";
 import { AlertType } from "@/interfaces/alert/alert";
 import TextInput from "@/components/inputs/text/textInput";
 import Editor from "@/components/inputs/editor/editor";
+import Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 
 export default function Products({ data }: { data: Product}) {
     const [activeTab, setActiveTab] = useState('1');
@@ -50,13 +51,15 @@ export default function Products({ data }: { data: Product}) {
     return (
         <Layout>
             <Head>
-                <title>{'Административная панель: Редактирование' + data.name}</title>
+                <title>{'Административная панель: Редактирование ' + data.name}</title>
                 <meta name="description" content={"Административная панель: Редактирование " + data.name} />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            { resultAlert ? <div className='mb-3'><Alert severity={resultAlert.severity} title={resultAlert.title}>{resultAlert.text}</Alert></div>  : ''}
-            <div className='border border-solid border-[#d8d8d8] rounded'>
+            <h1>{'Редактирование ' + data.name}</h1>
+            <Breadcrumbs></Breadcrumbs>
+            { resultAlert ? <div className='mt-3'><Alert severity={resultAlert.severity} title={resultAlert.title}>{resultAlert.text}</Alert></div>  : ''}
+            <div className='border mt-3 border-solid border-[#d8d8d8] rounded'>
                 <EditForm onSubmit={handleSubmit} >
                     <ul>
                         <TabNavItem title="Основные" id="1" activeTab={activeTab} setActiveTab={setActiveTab} />

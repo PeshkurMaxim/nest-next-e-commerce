@@ -2,6 +2,7 @@
     width: 100%;
     border: 1px solid #ddd;
     table-layout: auto;
+    border-radius: 0.25rem;
 }
 .table thead tr td {
     vertical-align: middle;

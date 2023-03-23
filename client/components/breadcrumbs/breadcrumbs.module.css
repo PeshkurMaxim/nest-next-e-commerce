@@ -1,0 +1,28 @@
+.container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.container ol {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: baseline;
+    align-items: baseline;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+.link {
+    height: 20px;
+    color: #b5b5b8;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.link:hover {
+    color: #1c1c1e;
+}
+.divider {
+    margin: 0 6px;
+    color: #b5b5b8;
+}

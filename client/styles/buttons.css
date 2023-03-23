@@ -1,7 +1,15 @@
-.button {
+:root {
+    --main-color: #026ab5;
+    --success-color: #02b875;
+    --info-color: #0288d1;
+    --warning-color: #f57c00;
+    --error-color: #d32f2f;
+    --success-hover-color: #338033;
+}
+
+.default-btn {
     padding: 8px 17px;
     font-size: 14px;
-    background: var(--success-color);
     color: #fff;
     border-radius: 4px;
     margin: 10px;
@@ -9,7 +17,7 @@
     overflow: hidden;
     position: relative;
 }
-.button:before{
+.default-btn:before{
     content: '';
     display: block;
     position: absolute;
@@ -22,7 +30,7 @@
     filter: blur(30px);
     transform: translateX(-100px)  skewX(-15deg);
 }
-.button:after{
+.default-btn:after{
     content: '';
     display: block;
     position: absolute;
@@ -35,17 +43,22 @@
     filter: blur(5px);
     transform: translateX(-100px) skewX(-15deg);
 }
-.button:hover{
-    background: #338033;
+.default-btn:hover{
     cursor: pointer;
 }
-.button:hover:before{
+.default-btn:hover:before{
     transform: translateX(300px)  skewX(-15deg);  
     opacity: 0.6;
     transition: .5s;
 }
-.button:hover:after{
+.default-btn:hover:after{
     transform: translateX(300px) skewX(-15deg);  
     opacity: 1;
     transition: .5s;
+}
+.btn-success {
+    background: var(--success-color);
+}
+.btn-success:hover {
+    background: var(--success-hover-color);
 }
