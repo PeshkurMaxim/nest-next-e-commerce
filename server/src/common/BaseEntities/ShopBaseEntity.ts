@@ -12,8 +12,12 @@ export abstract class ShopBaseEntity {
   id: number;
 
   @ApiProperty()
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', nullable: false, unique: true })
   name: string;
+
+  @ApiProperty()
+  @Column({ type: 'boolean', nullable: false, default: true })
+  active: boolean;
 
   @ApiProperty()
   @CreateDateColumn()
