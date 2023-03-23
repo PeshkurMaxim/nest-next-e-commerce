@@ -1,7 +1,10 @@
 import Tooltip from '@/components/tooltip/tooltip';
+import Products from '@/pages/admin/products/[id]';
 import { Pencil } from '@styled-icons/bootstrap/Pencil';
 import { Trash } from '@styled-icons/bootstrap/Trash';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import Link from 'next/link';
+import { useState } from 'react';
 import styles from './list.module.css';
 
 interface ListProps<T> {
@@ -16,7 +19,21 @@ interface ListProps<T> {
 }
 
 export default function List<T extends { id: number }>({ data, collumns, actions, editLink, deleteLink }: ListProps<T>) {
-    
+    const [listData, setlistData] = useState(data);
+
+    const deleteHandler = async (id: number) => {
+        const isDelete = confirm(`Подтвердите удаление. Это действие необратимо!`)
+        if (isDelete) {
+            try {
+                const res: AxiosResponse<any, any> = await axios.delete(`/api/products/${id}`, {withCredentials: true});
+                alert('Элемент удален');
+                setlistData(listData.filter( product => product.id != id));
+            } catch (error: any | AxiosError) {
+                alert('Ошибка удаления');  
+            }
+        }
+    }
+
     const drawActions = (id: number) => {
         if (actions) {
             return (
@@ -25,7 +42,7 @@ export default function List<T extends { id: number }>({ data, collumns, actions
                         <Link href={editLink + id} className="bg-main block rounded-lg p-2 cursor-pointer group relative hover:opacity-90"><Pencil size='30' color='#fff'/></Link>
                     </Tooltip>
                     <Tooltip text='Удалить'>
-                        <span className='bg-red-600 block rounded-lg p-2 cursor-pointer group relative hover:opacity-90'><Trash size='30' color='#fff'/></span>
+                        <span onClick={() => deleteHandler(id)}  className='bg-red-600 block rounded-lg p-2 cursor-pointer group relative hover:opacity-90'><Trash size='30' color='#fff'/></span>
                     </Tooltip>
                 </td>
             )
@@ -51,7 +68,7 @@ export default function List<T extends { id: number }>({ data, collumns, actions
                 </tr>
             </thead>
             <tbody>
-                {data?.map( product => (
+                {listData?.map( product => (
                     <tr key={product.id}>
                         { 
                             collumns.map( (col, index) => {

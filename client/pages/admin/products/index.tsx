@@ -27,7 +27,7 @@ export default function Products({ data }: { data: Product[]}) {
             <h1>Товары</h1>
             <div className='flex justify-between'><Breadcrumbs></Breadcrumbs><CreateButton href='/admin/products/add' text='Создать'></CreateButton></div>
             <div className='mt-3'>
-                <List data={data} collumns={collumns} actions={true} editLink={'/admin/products/'} deleteLink={'test'}></List>
+                <List data={data} collumns={collumns} actions={true} editLink={'/admin/products/'} deleteLink={'/api/products/'}></List>
             </div>
         </Layout>
     )
