@@ -36,6 +36,11 @@ export class ProductsController {
     );
   }
 
+  @Get('count')
+  async count() {
+    return this.productsService.count();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(+id);

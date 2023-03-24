@@ -32,6 +32,10 @@ export class ProductsService {
     return query.getMany();
   }
 
+  count() {
+    return this.productRepository.count();
+  }
+
   findOne(id: number) {
     return this.productRepository.findOne({ where: { id } });
   }
