@@ -9,6 +9,8 @@ import { useEffect, useState, useTransition } from "react";
 import Pagination from "@/components/pagination/pagination";
 import Loader from "@/components/loader/loader";
 import { deleteProduct, getProducts, getProductsCount } from "@/modules/products/product";
+import Filter from "@/components/admin/filter/filter";
+import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
 
 const PAGE_SIZE = 20;
 
@@ -68,6 +70,18 @@ export default function Products({ data }: { data: Product[]}) {
         { key: 'created_at', title: 'Дата создания'},
         { key: 'updated_at', title: 'Дата редактирования'},
     ];
+
+    const filterCollumns : { 
+        key: keyof Product,
+        title: string,
+        type: VariableTypes
+    }[] = [
+        { key: 'id', title: 'ID', type: VariableTypes.STRING},
+        { key: 'name', title: 'Название', type: VariableTypes.STRING},
+        { key: 'created_at', title: 'Дата создания', type: VariableTypes.STRING},
+        { key: 'updated_at', title: 'Дата редактирования', type: VariableTypes.STRING},
+    ];
+
     return (
         <Layout>
             <Head>
@@ -78,6 +92,7 @@ export default function Products({ data }: { data: Product[]}) {
             </Head>
             <h1>Товары</h1>
             <div className='flex justify-between'><Breadcrumbs></Breadcrumbs><CreateButton href='/admin/products/add' text='Создать'></CreateButton></div>
+            <Filter collumns={filterCollumns}></Filter>
             <div className='mt-3'>
                 <Loader active={isPending}>
                     <List 
@@ -105,7 +120,7 @@ export default function Products({ data }: { data: Product[]}) {
 }
 
 export async function getServerSideProps() {
-    const res = await axios.get("http://localhost:3001/products", { params: {limit: PAGE_SIZE, offset: 0}, withCredentials: true});
+    const res = await axios.get("http://localhost:3001/products", { params: {limit: PAGE_SIZE, offset: 0, sort: 'ID', order: 'ASC'}, withCredentials: true});
     const data =  res.data;
     
     
