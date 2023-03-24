@@ -1,10 +1,7 @@
 import Tooltip from '@/components/tooltip/tooltip';
-import Products from '@/pages/admin/products/[id]';
 import { Pencil } from '@styled-icons/bootstrap/Pencil';
 import { Trash } from '@styled-icons/bootstrap/Trash';
-import axios, { AxiosError, AxiosResponse } from 'axios';
 import Link from 'next/link';
-import { useState } from 'react';
 import styles from './list.module.css';
 
 interface ListProps<T> {
@@ -15,22 +12,14 @@ interface ListProps<T> {
     }[],
     actions: boolean,
     editLink: string,
-    deleteLink: string,
+    onDelete: Function,
 }
 
-export default function List<T extends { id: number }>({ data, collumns, actions, editLink, deleteLink }: ListProps<T>) {
-    const [listData, setlistData] = useState(data);
-
+export default function List<T extends { id: number }>({ data, collumns, actions, editLink, onDelete }: ListProps<T>) {
     const deleteHandler = async (id: number) => {
         const isDelete = confirm(`Подтвердите удаление. Это действие необратимо!`)
         if (isDelete) {
-            try {
-                const res: AxiosResponse<any, any> = await axios.delete(`/api/products/${id}`, {withCredentials: true});
-                alert('Элемент удален');
-                setlistData(listData.filter( product => product.id != id));
-            } catch (error: any | AxiosError) {
-                alert('Ошибка удаления');  
-            }
+            onDelete(id);
         }
     }
 
@@ -68,7 +57,7 @@ export default function List<T extends { id: number }>({ data, collumns, actions
                 </tr>
             </thead>
             <tbody>
-                {listData?.map( product => (
+                {data?.map( product => (
                     <tr key={product.id}>
                         { 
                             collumns.map( (col, index) => {

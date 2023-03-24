@@ -1,9 +1,8 @@
 import Link from "next/link";
-import Image from 'next/image';
 
 export default function LeftMenu() {
     return (
-        <nav className='overflow-auto w-1/12 h-screen bg-main text-white'>
+        <nav className='overflow-auto w-1/12 min-h-full bg-main text-white'>
             {/* <div className='w-full flex items-center justify-center'>
                 <Image
                     src="/vercel.svg"

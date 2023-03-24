@@ -15,7 +15,7 @@ export default function Categories({ data }: { data: Category[]}) {
     ];
     return (
         <Layout>
-            <List data={data} collumns={collumns} actions={true} editLink={'/admin/categories/'} deleteLink={'test'}></List>
+            {/* <List data={data} collumns={collumns} actions={true} editLink={'/admin/categories/'} deleteLink={() => {}}></List> */}
         </Layout>
     )
 }
