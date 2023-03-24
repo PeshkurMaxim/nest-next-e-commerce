@@ -18,8 +18,18 @@ export class ProductsService {
     return this.productRepository.save(newProduct);
   }
 
-  findAll() {
-    return this.productRepository.find();
+  find(limit: number, offset: number, sort: string, order: 'ASC' | 'DESC') {
+    let query = this.dataSource
+      .getRepository(Product)
+      .createQueryBuilder('product');
+
+    if (sort && order) query = query.orderBy(`${sort}`, order);
+
+    if (typeof offset !== undefined && offset > 0) query = query.skip(offset);
+
+    if (typeof limit !== undefined && limit > 0) query = query.take(limit);
+
+    return query.getMany();
   }
 
   findOne(id: number) {
@@ -33,7 +43,6 @@ export class ProductsService {
       .set(updateProductDto)
       .where('id = :id', { id })
       .execute();
-    // return this.productRepository.update(id, updateProductDto);
   }
 
   remove(id: number) {

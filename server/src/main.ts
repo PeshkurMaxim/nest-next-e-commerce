@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -7,6 +8,7 @@ import { TypeOrmExceptionFilter } from './common/exceptionsFilters/typeorm-excep
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new TypeOrmExceptionFilter());
 
   const openAPIConfig = new DocumentBuilder()

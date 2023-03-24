@@ -8,11 +8,13 @@ import {
   Delete,
   Res,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FindDto } from 'src/common/dto/find.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -24,9 +26,14 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
-  @Get()
-  async findAll() {
-    return this.productsService.findAll();
+  @Get('?')
+  async find(@Query() params: FindDto) {
+    return this.productsService.find(
+      params.limit,
+      params.offset,
+      params.sort,
+      params.order,
+    );
   }
 
   @Get(':id')
