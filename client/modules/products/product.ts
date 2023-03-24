@@ -6,10 +6,11 @@ export const getProductsCount = () => {
         .catch((err) => console.log(err));
 }
 
-export const getProducts = async (page: number, pageSize: number) => {
+export const getProducts = async (page: number, pageSize: number, sort: string = 'id', order: string = 'ASC') => {
+
     try {
         const offset = (page - 1) * pageSize;
-        const res = await axios.get("/api/products", { params: {limit: pageSize, offset}, withCredentials: true});
+        const res = await axios.get("/api/products", { params: {limit: pageSize, offset, sort, order}, withCredentials: true});
         
         if (res.status >= 200 && res.status < 300)
             return res.data;   

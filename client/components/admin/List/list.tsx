@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Tooltip from '@/components/tooltip/tooltip';
 import { Pencil } from '@styled-icons/bootstrap/Pencil';
 import { Trash } from '@styled-icons/bootstrap/Trash';
@@ -13,9 +14,12 @@ interface ListProps<T> {
     actions: boolean,
     editLink: string,
     onDelete: Function,
+    onSort: Function,
+    currentSortField: string,
+    currentOrder: string,
 }
 
-export default function List<T extends { id: number }>({ data, collumns, actions, editLink, onDelete }: ListProps<T>) {
+export default function List<T extends { id: number }>({ data, collumns, actions, editLink, onDelete, onSort, currentSortField, currentOrder }: ListProps<T>) {
     const deleteHandler = async (id: number) => {
         const isDelete = confirm(`Подтвердите удаление. Это действие необратимо!`)
         if (isDelete) {
@@ -40,7 +44,7 @@ export default function List<T extends { id: number }>({ data, collumns, actions
     const drawActionHeader = () => {
         if (actions) {
             return (
-                <td>Действия</td>
+                <td className='w-[125px]'>Действия</td>
                 
             )
         }
@@ -51,7 +55,16 @@ export default function List<T extends { id: number }>({ data, collumns, actions
             <thead>
                 <tr>
                     {collumns.map( (col, key) => (
-                        <td key={key}>{col.title}</td>
+                        <td key={key} onClick={() => onSort(col.key)}>
+                            {col.title} 
+                            <Image
+                                className={`${styles.dropdown} ${col.key == currentSortField ? styles.active : ''} ${styles[currentOrder.toLowerCase()]}`} 
+                                alt='dropdown' 
+                                src="/dropdown.svg" 
+                                width={15} 
+                                height={6} 
+                                priority/> 
+                        </td>
                     ))}
                     { drawActionHeader() }
                 </tr>

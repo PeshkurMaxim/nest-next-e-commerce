@@ -7,8 +7,10 @@
 .table tr {
     border-bottom: 1px solid #ddd;
 }
+.table thead td {
+    cursor: pointer;
+}
 .table td {
-    border-bottom: 1px solid #ddd;
     padding: 0.5rem;
 }
 .table td.drawActions {
@@ -16,4 +18,16 @@
     align-items: center;
     border: none;
     gap: 1rem;
+}
+.dropdown {
+    opacity: 0;
+    display: inline;
+    margin-left: 5px;
+    transition: transform 0.2s ease-in-out;
+}
+.dropdown.active {
+    opacity: 1;
+}
+.dropdown.desc {
+    transform: rotate(-180deg);
 }

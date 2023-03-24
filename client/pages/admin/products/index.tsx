@@ -5,18 +5,20 @@ import List from "@/components/admin/List/list";
 import Head from "next/head";
 import Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 import CreateButton from "@/components/buttons/create/createButton";
-import { startTransition, useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Pagination from "@/components/pagination/pagination";
 import Loader from "@/components/loader/loader";
 import { deleteProduct, getProducts, getProductsCount } from "@/modules/products/product";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 20;
 
 export default function Products({ data }: { data: Product[]}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentTableData, setCurrentTableData] = useState(data);
     const [totalProductsCount, setTotalProductsCount] = useState(0)
     const [isPending, startTransition] = useTransition();
+    const [sortField, setSortField] = useState("id");
+    const [order, setOrder] = useState("ASC");
 
     useEffect(() => {
         startTransition(() => {
@@ -46,6 +48,17 @@ export default function Products({ data }: { data: Product[]}) {
         })
     }
 
+    const onSort = (key: string) => {
+        const sortOrder = key === sortField && order === "ASC" ? "DESC" : "ASC";
+        setSortField(key);
+        setOrder(sortOrder);
+        startTransition(() => {
+            getProducts(currentPage, PAGE_SIZE, key, sortOrder).then( (newData) => {                    
+                setCurrentTableData(newData);
+            })
+        }); 
+    }
+
     const collumns : { 
         key: keyof Product,
         title: string,
@@ -67,7 +80,16 @@ export default function Products({ data }: { data: Product[]}) {
             <div className='flex justify-between'><Breadcrumbs></Breadcrumbs><CreateButton href='/admin/products/add' text='Создать'></CreateButton></div>
             <div className='mt-3'>
                 <Loader active={isPending}>
-                    <List data={currentTableData} collumns={collumns} actions={true} editLink={'/admin/products/'} onDelete={onDelete}></List>
+                    <List 
+                        data={currentTableData} 
+                        collumns={collumns} 
+                        actions={true} 
+                        editLink={'/admin/products/'} 
+                        onDelete={onDelete} 
+                        onSort={onSort}
+                        currentSortField={sortField}
+                        currentOrder={order}
+                    />
                     <Pagination
                         className="pagination-bar"
                         currentPage={currentPage}
