@@ -1,0 +1,38 @@
+.button {
+    width: 45px;
+    min-width: 45px;
+    min-height: 25px;
+    height: 25px;
+    border-radius: 40px;
+    border: 0;
+    margin: 0;
+    background-color: #d8d8d8;
+    cursor: pointer;
+    padding: 0 2px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    line-height: 0;
+    transition: background-color .2s;
+
+    margin: 0;
+}
+.button::before {
+    position: relative;
+    content: "";
+    display: block;
+    height: 21px;
+    width: 21px;
+    border-radius: 50%;
+    background-color: #fff;
+    left: 0;
+    transition: left .2s;
+}
+
+.button.checked::before {
+    left: calc(100% - 21px);
+}
+.checked {
+    background-color: var(--main-color);
+}

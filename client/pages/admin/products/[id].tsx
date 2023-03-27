@@ -15,6 +15,7 @@ const tabs:Tab<Product>[] = [
         title: 'Основные',
         items: [
             { name: 'id', title:'ID', type: VariableTypes.READONLY },
+            { name: 'active', title:'Активность', type: VariableTypes.CHECKBOX },
             { name: 'created_at', title:'Дата создания', type: VariableTypes.READONLYDATETIME },
             { name: 'updated_at', title:'Дата обновления', type: VariableTypes.READONLYDATETIME },
             { name: 'name', title: 'Название', type: VariableTypes.STRING},
@@ -35,7 +36,9 @@ export default function Products({ data }: { data: Product}) {
     const [resultAlert, setResultAlert] = useState<AlertType>();
 
     const [formData, setformData] = useState(data);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {        
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        console.log(e);
+               
         setformData({
           ...formData,
           [e.target.name]: e.target.value
@@ -82,10 +85,10 @@ export default function Products({ data }: { data: Product}) {
     )
 }
 
-export async function getServerSideProps<GetServerSideProps>({ params } : { params ?: any }) {
+export async function getServerSideProps({ params } : { params ?: any }) {
     const id = params.id;
     const res = await axios.get(`http://localhost:3001/products/${id}`, {withCredentials: true});
-    const data = await res.data;
+    const data = await res.data;    
     
     return { props: { data } }
 }

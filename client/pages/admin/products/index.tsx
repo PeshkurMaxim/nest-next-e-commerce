@@ -22,6 +22,7 @@ const collumns : {
     type: VariableTypes
 }[] = [
     { key: 'id', title: 'ID', type: VariableTypes.STRING },
+    { key: 'active', title: 'Активность', type: VariableTypes.CHECKBOX },
     { key: 'name', title: 'Название', type: VariableTypes.STRING },
     { key: 'created_at', title: 'Дата создания', type: VariableTypes.DATETIME },
     { key: 'updated_at', title: 'Дата редактирования', type: VariableTypes.DATETIME },

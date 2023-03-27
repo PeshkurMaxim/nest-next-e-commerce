@@ -26,7 +26,7 @@ export default function EditForm<T>({ onSubmit, tabs, formData, onChange }: List
             <>
                 <ul>
                     {tabs.map( (tab, index) => (
-                        <TabNavItem key={index} title={tab.title} id={(index + 1).toString()} activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <TabNavItem key={tab.title} title={tab.title} id={(index + 1).toString()} activeTab={activeTab} setActiveTab={setActiveTab} />
                     ))}
                 </ul>
                 {tabs.map( (tab, index) => {
@@ -35,7 +35,7 @@ export default function EditForm<T>({ onSubmit, tabs, formData, onChange }: List
                     tab.items.map( item => {
                         const Component = VariableTypesToComponent[item.type];
                         content.push(
-                            <EditRow key={index} title={item.title + ':'}>
+                            <EditRow key={item.name.toString()} title={item.title + ':'}>
                                 <Component name={item.name.toString()} value={`${formData[item.name] ?? ''}`} placeholder={item.title} onChange={onChange} />
                             </EditRow>
                         );
