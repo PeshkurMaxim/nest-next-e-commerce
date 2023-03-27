@@ -15,6 +15,7 @@ const tabs:Tab<createProductDto>[] = [
     {
         title: 'Основные',
         items: [
+            { name: 'active', title:'Активность', type: VariableTypes.CHECKBOX },
             { name: 'name', title: 'Название', type: VariableTypes.STRING},
         ],
     },
@@ -36,6 +37,7 @@ export default function Products() {
 
     const [formData, setformData] = useState<createProductDto>({
         name: '',
+        active: true,
         path: '',
         h1: '',
         title: '',
