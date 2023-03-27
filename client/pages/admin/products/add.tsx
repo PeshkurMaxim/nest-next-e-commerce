@@ -1,21 +1,35 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import Layout from "@/components/admin/layout";
-import EditRow from "@/components/admin/editRow/editRow";
 import Head from "next/head";
 import EditForm from "@/components/admin/editForm/editForm";
 import { useState } from "react";
-import TabNavItem from "@/components/tabs/navItem/navItem";
-import TabItem from "@/components/tabs/tabItem/tabItem";
 import Alert from "@/components/alert/alert";
 import { AlertType } from "@/interfaces/alert/alert";
-import TextInput from "@/components/inputs/text/textInput";
-import Editor from "@/components/inputs/editor/editor";
 import Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 import { createProductDto } from "@/interfaces/product/createProductDto";
 import { useRouter } from 'next/navigation';
+import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
+import { Tab } from "@/interfaces/tab/tab";
+
+const tabs:Tab<createProductDto>[] = [
+    {
+        title: 'Основные',
+        items: [
+            { name: 'name', title: 'Название', type: VariableTypes.STRING},
+        ],
+    },
+    {
+        title: 'SEO',
+        items: [
+            { name: 'path', title: 'url', type: VariableTypes.STRING},
+            { name: 'h1', title: 'h1', type: VariableTypes.EDITOR},
+            { name: 'title', title: 'title', type: VariableTypes.EDITOR},
+            { name: 'description', title: 'description', type: VariableTypes.EDITOR},
+        ],
+    }
+]
 
 export default function Products() {
-    const [activeTab, setActiveTab] = useState('1');
     const [resultAlert, setResultAlert] = useState<AlertType>();
     const router = useRouter()
 
@@ -57,6 +71,7 @@ export default function Products() {
         }
     };
 
+
     return (
         <Layout>
             <Head>
@@ -69,31 +84,7 @@ export default function Products() {
             <Breadcrumbs></Breadcrumbs>
             { resultAlert ? <div className='mt-3'><Alert severity={resultAlert.severity} title={resultAlert.title}>{resultAlert.text}</Alert></div>  : ''}
             <div className='border mt-3 border-solid border-[#d8d8d8] rounded'>
-                <EditForm onSubmit={handleSubmit} >
-                    <ul>
-                        <TabNavItem title="Основные" id="1" activeTab={activeTab} setActiveTab={setActiveTab} />
-                        <TabNavItem title="SEO" id="2" activeTab={activeTab} setActiveTab={setActiveTab} />
-                    </ul>
-                    <TabItem id="1" activeTab={activeTab}>
-                        <EditRow title="Название:">
-                            <TextInput name="name" placeholder="Название" value={formData.name} onChange={handleChange} />
-                        </EditRow>
-                    </TabItem>
-                    <TabItem id="2" activeTab={activeTab}>
-                        <EditRow title="url:">
-                            <TextInput name="path" placeholder="path" value={formData.path} onChange={handleChange} />
-                        </EditRow>
-                        <EditRow title="h1:">
-                            <Editor name="h1" value={formData.h1} onChange={handleChange} />
-                        </EditRow>
-                        <EditRow title="title:">
-                            <Editor name="title" value={formData.title} onChange={handleChange} />
-                        </EditRow>
-                        <EditRow title="description:">
-                            <Editor name="description" value={formData.description} onChange={handleChange} />
-                        </EditRow>
-                    </TabItem>
-                </EditForm>
+                <EditForm onSubmit={handleSubmit} tabs={tabs} formData={formData} onChange={handleChange} />
             </div>
         </Layout>
     )
