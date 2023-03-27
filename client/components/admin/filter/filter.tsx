@@ -31,14 +31,14 @@ export default function Filter<T extends { id: number }>({ collumns, onClick }: 
     }
 
     const onClickHandler = () => {
+        const newQuery = { ...query, ...filterData };
         router.push({
                 pathname: '/admin/products',
-                query: { ...query, ...filterData }
+                query: newQuery
             }, 
             undefined, 
             { shallow: true }
-        )
-        onClick();
+        ).then(() => onClick(newQuery))
     }
 
     return (

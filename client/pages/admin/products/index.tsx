@@ -12,6 +12,7 @@ import { deleteProduct, getProducts, getProductsCount } from "@/modules/products
 import Filter from "@/components/admin/filter/filter";
 import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
 import { useRouter } from "next/router";
+import { ParsedUrlQuery } from "querystring";
 
 const PAGE_SIZE = 20;
 
@@ -84,9 +85,9 @@ export default function Products({ data }: { data: Product[]}) {
         }); 
     }
 
-    const onFilter = () => {
+    const onFilter = (newQuery: ParsedUrlQuery) => {        
         startTransition(() => {
-            getProducts(currentPage, PAGE_SIZE, sortField, order, query).then( (newData) => {                    
+            getProducts(currentPage, PAGE_SIZE, sortField, order, newQuery).then( (newData) => {                    
                 setCurrentTableData(newData);
             })
         }); 

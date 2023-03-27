@@ -25,7 +25,9 @@ export class ProductsService {
 
     if (params.id) query = query.where('product.id = :id', { id: params.id });
     if (params.name)
-      query = query.where('product.name = :name', { name: params.name });
+      query = query.where('product.name like :name', {
+        name: `%${params.name}%`,
+      });
 
     if (params.sort && params.order)
       query = query.orderBy(`${params.sort}`, params.order);
