@@ -5,6 +5,6 @@ interface ListProps {
 
 export default function SuccessButton({ text, type }: ListProps) {
     return (
-        <button className='default-btn btn-success' type={type ? type : 'button'}>{text}</button>
+        <button className='default-btn btn-success m-3' type={type ? type : 'button'}>{text}</button>
     );
 }

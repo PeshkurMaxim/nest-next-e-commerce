@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryFailedError, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -18,16 +18,23 @@ export class ProductsService {
     return this.productRepository.save(newProduct);
   }
 
-  find(limit: number, offset: number, sort: string, order: 'ASC' | 'DESC') {
+  find(params) {
     let query = this.dataSource
       .getRepository(Product)
       .createQueryBuilder('product');
 
-    if (sort && order) query = query.orderBy(`${sort}`, order);
+    if (params.id) query = query.where('product.id = :id', { id: params.id });
+    if (params.name)
+      query = query.where('product.name = :name', { name: params.name });
 
-    if (typeof offset !== undefined && offset > 0) query = query.skip(offset);
+    if (params.sort && params.order)
+      query = query.orderBy(`${params.sort}`, params.order);
 
-    if (typeof limit !== undefined && limit > 0) query = query.take(limit);
+    if (typeof params.offset !== undefined && params.offset > 0)
+      query = query.skip(params.offset);
+
+    if (typeof params.limit !== undefined && params.limit > 0)
+      query = query.take(params.limit);
 
     return query.getMany();
   }

@@ -4,12 +4,14 @@ import { Pencil } from '@styled-icons/bootstrap/Pencil';
 import { Trash } from '@styled-icons/bootstrap/Trash';
 import Link from 'next/link';
 import styles from './list.module.css';
+import { VariableTypes } from '@/interfaces/variableTypes/variableTypes';
 
 interface ListProps<T> {
     data: T[],
     collumns: { 
         key: keyof T,
         title: string,
+        type: VariableTypes,
     }[],
     actions: boolean,
     editLink: string,
@@ -74,8 +76,8 @@ export default function List<T extends { id: number }>({ data, collumns, actions
                     <tr key={product.id}>
                         { 
                             collumns.map( (col, index) => {
-                                let value = `${product[col.key]}`;                                                                
-                                value = (value.toString().includes('T') && !isNaN(Date.parse(value))) ? new Date(value).toLocaleString() : value;
+                                let value = `${product[col.key]}`;
+                                value = col.type == VariableTypes.DATETIME ? new Date(value).toLocaleString() : value;                                                                 
                                 return ( <td key={index}>{ value }</td> )
                             })
                         }

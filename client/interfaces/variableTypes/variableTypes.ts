@@ -1,3 +1,4 @@
+import DateTimeInput from "@/components/inputs/datetime/datetime";
 import Editor from "@/components/inputs/editor/editor";
 import TextInput from "@/components/inputs/text/textInput";
 
@@ -9,7 +10,7 @@ export enum VariableTypes {
 }
 export const VariableTypesToComponent = {
     STRING: TextInput,
-    DATETIME: '',
+    DATETIME: DateTimeInput,
     EDITOR: Editor,
     FILE: '',
 }

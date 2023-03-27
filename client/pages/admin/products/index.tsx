@@ -11,8 +11,29 @@ import Loader from "@/components/loader/loader";
 import { deleteProduct, getProducts, getProductsCount } from "@/modules/products/product";
 import Filter from "@/components/admin/filter/filter";
 import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
+import { useRouter } from "next/router";
 
 const PAGE_SIZE = 20;
+
+const collumns : { 
+    key: keyof Product,
+    title: string,
+    type: VariableTypes
+}[] = [
+    { key: 'id', title: 'ID', type: VariableTypes.STRING },
+    { key: 'name', title: 'Название', type: VariableTypes.STRING },
+    { key: 'created_at', title: 'Дата создания', type: VariableTypes.DATETIME },
+    { key: 'updated_at', title: 'Дата редактирования', type: VariableTypes.DATETIME },
+];
+
+const filterCollumns : { 
+    key: keyof Product,
+    title: string,
+    type: VariableTypes
+}[] = [
+    { key: 'id', title: 'ID', type: VariableTypes.STRING},
+    { key: 'name', title: 'Название', type: VariableTypes.STRING},
+];
 
 export default function Products({ data }: { data: Product[]}) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +42,8 @@ export default function Products({ data }: { data: Product[]}) {
     const [isPending, startTransition] = useTransition();
     const [sortField, setSortField] = useState("id");
     const [order, setOrder] = useState("ASC");
+    const router = useRouter();
+    const { query } = router;
 
     useEffect(() => {
         startTransition(() => {
@@ -33,7 +56,7 @@ export default function Products({ data }: { data: Product[]}) {
 
     const pageChangeHandler = (page: number) => {
         startTransition(() => {
-            getProducts(page, PAGE_SIZE).then( (newData) => {
+            getProducts(currentPage, PAGE_SIZE, sortField, order, query).then( (newData) => {                    
                 setCurrentTableData(newData);
                 setCurrentPage(page);
             })
@@ -43,7 +66,7 @@ export default function Products({ data }: { data: Product[]}) {
     const onDelete = (id: number) => {
         deleteProduct(id).then( () => {
             startTransition(() => {
-                getProducts(currentPage, PAGE_SIZE).then( (newData) => {                    
+                getProducts(currentPage, PAGE_SIZE, sortField, order, query).then( (newData) => {                    
                     setCurrentTableData(newData);
                 })
             }); 
@@ -55,32 +78,19 @@ export default function Products({ data }: { data: Product[]}) {
         setSortField(key);
         setOrder(sortOrder);
         startTransition(() => {
-            getProducts(currentPage, PAGE_SIZE, key, sortOrder).then( (newData) => {                    
+            getProducts(currentPage, PAGE_SIZE, key, sortOrder, query).then( (newData) => {                    
                 setCurrentTableData(newData);
             })
         }); 
     }
 
-    const collumns : { 
-        key: keyof Product,
-        title: string,
-    }[] = [
-        { key: 'id', title: 'ID'},
-        { key: 'name', title: 'Название'},
-        { key: 'created_at', title: 'Дата создания'},
-        { key: 'updated_at', title: 'Дата редактирования'},
-    ];
-
-    const filterCollumns : { 
-        key: keyof Product,
-        title: string,
-        type: VariableTypes
-    }[] = [
-        { key: 'id', title: 'ID', type: VariableTypes.STRING},
-        { key: 'name', title: 'Название', type: VariableTypes.STRING},
-        { key: 'created_at', title: 'Дата создания', type: VariableTypes.STRING},
-        { key: 'updated_at', title: 'Дата редактирования', type: VariableTypes.STRING},
-    ];
+    const onFilter = () => {
+        startTransition(() => {
+            getProducts(currentPage, PAGE_SIZE, sortField, order, query).then( (newData) => {                    
+                setCurrentTableData(newData);
+            })
+        }); 
+    }
 
     return (
         <Layout>
@@ -92,7 +102,7 @@ export default function Products({ data }: { data: Product[]}) {
             </Head>
             <h1>Товары</h1>
             <div className='flex justify-between'><Breadcrumbs></Breadcrumbs><CreateButton href='/admin/products/add' text='Создать'></CreateButton></div>
-            <Filter collumns={filterCollumns}></Filter>
+            <Filter collumns={filterCollumns} onClick={onFilter}></Filter>
             <div className='mt-3'>
                 <Loader active={isPending}>
                     <List 

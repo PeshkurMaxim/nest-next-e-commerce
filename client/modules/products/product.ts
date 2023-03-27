@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export const getProductsCount = () => {
     return axios.get(`/api/products/count`, {withCredentials: true})
@@ -6,11 +7,12 @@ export const getProductsCount = () => {
         .catch((err) => console.log(err));
 }
 
-export const getProducts = async (page: number, pageSize: number, sort: string = 'id', order: string = 'ASC') => {
-
+export const getProducts = async (page: number, pageSize: number, sort: string = 'id', order: string = 'ASC', query: any = {}) => {
+    
     try {
         const offset = (page - 1) * pageSize;
-        const res = await axios.get("/api/products", { params: {limit: pageSize, offset, sort, order}, withCredentials: true});
+    console.log(query);
+        const res = await axios.get("/api/products", { params: {...query, limit: pageSize, offset, sort, order}, withCredentials: true});
         
         if (res.status >= 200 && res.status < 300)
             return res.data;   

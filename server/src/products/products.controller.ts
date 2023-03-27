@@ -28,12 +28,7 @@ export class ProductsController {
 
   @Get('?')
   async find(@Query() params: FindDto) {
-    return this.productsService.find(
-      params.limit,
-      params.offset,
-      params.sort,
-      params.order,
-    );
+    return this.productsService.find(params);
   }
 
   @Get('count')
