@@ -1,12 +1,6 @@
-import Image from 'next/image'
-import Tooltip from '@/components/tooltip/tooltip';
-import { Pencil } from '@styled-icons/bootstrap/Pencil';
-import { Trash } from '@styled-icons/bootstrap/Trash';
-import Link from 'next/link';
 import styles from './filter.module.css';
 import { VariableTypes, VariableTypesToComponent } from '@/interfaces/variableTypes/variableTypes';
 import React, { useState } from 'react';
-import SuccessButton from '@/components/buttons/success/successButton';
 import { useRouter } from 'next/router';
 
 interface ListProps<T> {
@@ -20,7 +14,7 @@ interface ListProps<T> {
 
 export default function Filter<T extends { id: number }>({ collumns, onClick }: ListProps<T>) {
     const router = useRouter();
-    const { query } = router;
+    const { query, pathname } = router;
     const [filterData, setFilterData] = useState({} as T);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +27,7 @@ export default function Filter<T extends { id: number }>({ collumns, onClick }: 
     const onClickHandler = () => {
         const newQuery = { ...query, ...filterData };
         router.push({
-                pathname: '/admin/products',
+                pathname: pathname,
                 query: newQuery
             }, 
             undefined, 

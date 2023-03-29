@@ -1,4 +1,4 @@
-import { VariableTypes } from "../variableTypes/variableTypes";
+import { VariableTypes, VariableTypesToComponent } from "../variableTypes/variableTypes";
 
 export interface Tab<T> {
     title: string,
@@ -6,5 +6,6 @@ export interface Tab<T> {
         name: keyof T,
         title: string,
         type: VariableTypes,
+        component?: JSX.Element,
     }[]
 }

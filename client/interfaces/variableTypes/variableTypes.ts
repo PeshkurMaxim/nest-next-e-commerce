@@ -13,6 +13,7 @@ export enum VariableTypes {
     READONLYDATETIME = 'READONLYDATETIME',
     CHECKBOX = 'CHECKBOX',
     FILE = 'FILE',
+    CUSTOM = 'CUSTOM',
 }
 export const VariableTypesToComponent = {
     STRING: TextInput,

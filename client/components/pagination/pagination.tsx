@@ -1,6 +1,6 @@
 import { PaginationProps } from '@/interfaces/pagination/pagination';
 import React from 'react';
-import { usePagination, DOTS } from '../hooks/usePagination';
+import { usePagination, DOTS } from '../../hooks/usePagination';
 import styles from './pagination.module.css';
 
 export default function Pagination(props: PaginationProps) {

@@ -9,6 +9,7 @@ import { AlertType } from "@/interfaces/alert/alert";
 import Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 import { Tab } from "@/interfaces/tab/tab";
 import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
+import { Category } from "@/interfaces/category/category";
 
 const tabs:Tab<Product>[] = [
     {
@@ -32,13 +33,12 @@ const tabs:Tab<Product>[] = [
     }
 ]
 
-export default function Products({ data }: { data: Product}) {
+export default function Products({ data }: { data: { product: Product, categories: Category[]}}) {
+    const { product, categories } = data;
+    const [formData, setformData] = useState(product);
     const [resultAlert, setResultAlert] = useState<AlertType>();
 
-    const [formData, setformData] = useState(data);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
-        console.log(e);
-               
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {                
         setformData({
           ...formData,
           [e.target.name]: e.target.value
@@ -49,7 +49,7 @@ export default function Products({ data }: { data: Product}) {
         e.preventDefault();
         
         try {
-            const res: AxiosResponse<any, any> = await axios.patch(`/api/products/${data.id}`, formData, {withCredentials: true});
+            const res: AxiosResponse<any, any> = await axios.patch(`/api/products/${product.id}`, formData, {withCredentials: true});
 
             if (res.status >= 200 && res.status < 300) {
                 setResultAlert({
@@ -70,12 +70,10 @@ export default function Products({ data }: { data: Product}) {
     return (
         <Layout>
             <Head>
-                <title>{'Административная панель: Редактирование ' + data.name}</title>
-                <meta name="description" content={"Административная панель: Редактирование " + data.name} />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
+                <title>{'Административная панель: Редактирование ' + product.name}</title>
+                <meta name="description" content={"Административная панель: Редактирование " + product.name} />
             </Head>
-            <h1>{'Редактирование ' + data.name}</h1>
+            <h1>{'Редактирование ' + product.name}</h1>
             <Breadcrumbs></Breadcrumbs>
             { resultAlert ? <div className='mt-3'><Alert severity={resultAlert.severity} title={resultAlert.title}>{resultAlert.text}</Alert></div>  : ''}
             <div className='border mt-3 border-solid border-[#d8d8d8] rounded'>
@@ -87,9 +85,25 @@ export default function Products({ data }: { data: Product}) {
 
 export async function getServerSideProps({ params } : { params ?: any }) {
     const id = params.id;
-    const res = await axios.get(`http://localhost:3001/products/${id}`, {withCredentials: true});
-    const data = await res.data;    
-    
+    let data = {
+        product: {},
+        categories: [], 
+    };    
+
+    const product = axios.get(`http://localhost:3001/products/${id}`, {withCredentials: true});
+    const categories = axios.get(`http://localhost:3001/categories`, {withCredentials: true});
+
+    try {
+        const values = await Promise.all([product, categories])
+        data['product'] = values[0].data;
+        data['categories'] = values[1].data;
+    } catch (error: any | AxiosError) {
+        if (error instanceof AxiosError) {
+            const { response } = error;
+            console.log(response?.data.message);
+        }            
+    }
+
     return { props: { data } }
 }
   

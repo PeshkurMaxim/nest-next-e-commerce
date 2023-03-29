@@ -6,9 +6,10 @@ import {
   Patch,
   Param,
   Delete,
-  Res,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { FindDto } from 'src/common/dto/find.dto';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -23,9 +24,19 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
-  @Get()
+  @Get('?')
+  async find(@Query() params: FindDto) {
+    return this.categoriesService.find(params);
+  }
+
+  @Get('all')
   async findAll() {
     return this.categoriesService.findAll();
+  }
+
+  @Get('count')
+  async count() {
+    return this.categoriesService.count();
   }
 
   @Get(':id')
@@ -34,7 +45,10 @@ export class CategoriesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
     return this.categoriesService.update(+id, updateCategoryDto);
   }
 

@@ -33,12 +33,20 @@ export default function EditForm<T>({ onSubmit, tabs, formData, onChange }: List
                     let content: ReactNode[] = [];
                     
                     tab.items.map( item => {
-                        const Component = VariableTypesToComponent[item.type];
-                        content.push(
-                            <EditRow key={item.name.toString()} title={item.title + ':'}>
-                                <Component name={item.name.toString()} value={`${formData[item.name] ?? ''}`} placeholder={item.title} onChange={onChange} />
-                            </EditRow>
-                        );
+                        if (item.type == VariableTypes.CUSTOM) {
+                            content.push(
+                                <EditRow key={item.name.toString()} title={item.title + ':'}>
+                                    {item?.component}
+                                </EditRow>    
+                            )
+                        } else {
+                            const Component = VariableTypesToComponent[item.type];
+                            content.push(
+                                <EditRow key={item.name.toString()} title={item.title + ':'}>
+                                    <Component name={item.name.toString()} value={`${formData[item.name] ?? ''}`} placeholder={item.title} onChange={onChange} />
+                                </EditRow>
+                            );
+                        }
                     })
                     
                     return (

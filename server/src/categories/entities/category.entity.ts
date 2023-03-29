@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Category extends SeoShopBaseEntity {
   @ApiProperty()
   @ManyToOne(() => Category, (category) => category.children)
-  parent: Category;
+  parent: number;
 
   @ApiProperty()
   @OneToMany(() => Category, (category) => category.parent)

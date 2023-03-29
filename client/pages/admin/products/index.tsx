@@ -13,14 +13,11 @@ import Filter from "@/components/admin/filter/filter";
 import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
+import { Column } from "@/interfaces/column/column";
 
 const PAGE_SIZE = 20;
 
-const collumns : { 
-    key: keyof Product,
-    title: string,
-    type: VariableTypes
-}[] = [
+const collumns : Column<Product>[] = [
     { key: 'id', title: 'ID', type: VariableTypes.STRING },
     { key: 'active', title: 'Активность', type: VariableTypes.CHECKBOX },
     { key: 'name', title: 'Название', type: VariableTypes.STRING },
@@ -28,11 +25,7 @@ const collumns : {
     { key: 'updated_at', title: 'Дата редактирования', type: VariableTypes.DATETIME },
 ];
 
-const filterCollumns : { 
-    key: keyof Product,
-    title: string,
-    type: VariableTypes
-}[] = [
+const filterCollumns: Column<Product>[] = [
     { key: 'id', title: 'ID', type: VariableTypes.STRING},
     { key: 'name', title: 'Название', type: VariableTypes.STRING},
 ];
