@@ -1,39 +1,26 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import Layout from "@/components/admin/layout";
-import Head from "next/head";
-import EditForm from "@/components/admin/editForm/editForm";
-import { useState } from "react";
-import Alert from "@/components/alert/alert";
-import { AlertType } from "@/interfaces/alert/alert";
-import Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
-import { createProductDto } from "@/interfaces/product/createProductDto";
+import axios, { AxiosError } from 'axios';
+import Layout from '@/components/admin/layout';
+import Head from 'next/head';
+import EditForm from '@/components/admin/editForm/editForm';
+import { useState } from 'react';
+import Alert from '@/components/alert/alert';
+import { AlertType } from '@/interfaces/alert/alert';
+import Breadcrumbs from '@/components/breadcrumbs/breadcrumbs';
+import { createProductDto } from '@/interfaces/product/createProductDto';
 import { useRouter } from 'next/navigation';
-import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
-import { Tab } from "@/interfaces/tab/tab";
+import { VariableTypes } from '@/interfaces/variableTypes/variableTypes';
+import { Tab } from '@/interfaces/tab/tab';
+import { useMounted } from '@/hooks/useMounted';
+import Select from 'react-select';
+import { theme } from '@/components/inputs/react-select/theme';
+import { createOptionsFromArray } from '@/modules/categories/category';
+import { Category } from '@/interfaces/category/category';
 
-const tabs:Tab<createProductDto>[] = [
-    {
-        title: 'Основные',
-        items: [
-            { name: 'active', title:'Активность', type: VariableTypes.CHECKBOX },
-            { name: 'name', title: 'Название', type: VariableTypes.STRING},
-        ],
-    },
-    {
-        title: 'SEO',
-        items: [
-            { name: 'path', title: 'url', type: VariableTypes.STRING},
-            { name: 'h1', title: 'h1', type: VariableTypes.EDITOR},
-            { name: 'title', title: 'title', type: VariableTypes.EDITOR},
-            { name: 'description', title: 'description', type: VariableTypes.EDITOR},
-        ],
-    }
-]
-
-export default function Products() {
+export default function ProductsAdd({ data }: { data: { categories: Category[] } }) {
+    const { categories } = data;
     const [resultAlert, setResultAlert] = useState<AlertType>();
-    const router = useRouter()
-
+    const router = useRouter();
+    const hasMounted = useMounted();
 
     const [formData, setformData] = useState<createProductDto>({
         name: '',
@@ -42,7 +29,8 @@ export default function Products() {
         h1: '',
         title: '',
         description: '',
-        keywords: ''
+        keywords: '',
+        categoriesIds: null,
     });
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {        
         setformData({
@@ -55,12 +43,12 @@ export default function Products() {
         e.preventDefault();
         
         try {
-            const res: AxiosResponse<any, any> = await axios.post(`/api/products/`, formData, {withCredentials: true});
+            const res = await axios.post(`/api/products/`, formData, {withCredentials: true});
             
             if (res.status >= 200 && res.status < 300) {
-                router.push(`/admin/products/${res.data.id}`)
+                router.push(`/admin/products/${res.data.id}`);
             }
-        } catch (error: any | AxiosError) {
+        } catch (error) {
             if (error instanceof AxiosError) {
                 const { response } = error;
             
@@ -73,6 +61,49 @@ export default function Products() {
         }
     };
 
+    const categoriesForSelect = createOptionsFromArray(categories);
+    const categoriesSelect = hasMounted ? <Select  
+        name="categoriesIds" 
+        placeholder='Родительская категория' 
+        className='w-[46rem] text-sm' 
+        isSearchable 
+        isClearable 
+        isMulti
+        options={categoriesForSelect}
+        closeMenuOnSelect={false}
+        theme={theme}
+        onChange={(newValue) =>             
+            setformData({
+                ...formData,
+                ['categoriesIds']: newValue.map(val => val.value),
+            })
+        }
+    ></Select> : <></>;
+
+    const tabs:Tab<createProductDto>[] = [
+        {
+            title: 'Основные',
+            items: [
+                { name: 'active', title:'Активность', type: VariableTypes.CHECKBOX },
+                { name: 'name', title: 'Название', type: VariableTypes.STRING},
+            ],
+        },
+        {
+            title: 'Связи',
+            items: [
+                { name: 'categoriesIds', title: 'Категория', type: VariableTypes.CUSTOM, component: categoriesSelect},
+            ],
+        },
+        {
+            title: 'SEO',
+            items: [
+                { name: 'path', title: 'url', type: VariableTypes.STRING},
+                { name: 'h1', title: 'h1', type: VariableTypes.EDITOR},
+                { name: 'title', title: 'title', type: VariableTypes.EDITOR},
+                { name: 'description', title: 'description', type: VariableTypes.EDITOR},
+            ],
+        }
+    ];
 
     return (
         <Layout>
@@ -89,5 +120,12 @@ export default function Products() {
                 <EditForm onSubmit={handleSubmit} tabs={tabs} formData={formData} onChange={handleChange} />
             </div>
         </Layout>
-    )
+    );
+}
+
+export async function getServerSideProps() {
+    const res = await axios.get(`http://localhost:3001/categories/all`, {withCredentials: true});
+    const data = { categories: res.data };
+    
+    return { props: { data } };
 }

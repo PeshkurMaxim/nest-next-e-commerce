@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import Tooltip from '@/components/tooltip/tooltip';
 import { Pencil } from '@styled-icons/bootstrap/Pencil';
 import { Trash } from '@styled-icons/bootstrap/Trash';
@@ -23,11 +23,11 @@ interface ListProps<T> {
 
 export default function List<T extends { id: number }>({ data, collumns, actions, editLink, onDelete, onSort, currentSortField, currentOrder }: ListProps<T>) {
     const deleteHandler = async (id: number) => {
-        const isDelete = confirm(`Подтвердите удаление. Это действие необратимо!`)
+        const isDelete = confirm(`Подтвердите удаление. Это действие необратимо!`);
         if (isDelete) {
             onDelete(id);
         }
-    }
+    };
 
     const drawActions = (id: number) => {
         if (actions) {
@@ -40,17 +40,17 @@ export default function List<T extends { id: number }>({ data, collumns, actions
                         <span onClick={() => deleteHandler(id)}  className='bg-red-600 block rounded-lg p-2 cursor-pointer group relative hover:opacity-90'><Trash size='30' color='#fff'/></span>
                     </Tooltip>
                 </td>
-            )
+            );
         }
-    }
+    };
     const drawActionHeader = () => {
         if (actions) {
             return (
                 <td className='w-[125px]'>Действия</td>
                 
-            )
+            );
         }
-    }
+    };
     
     return (
         <table className={styles.table}>
@@ -78,7 +78,7 @@ export default function List<T extends { id: number }>({ data, collumns, actions
                             collumns.map( (col, index) => {
                                 let value = `${product[col.key]}`;
                                 value = col.type == VariableTypes.DATETIME ? new Date(value).toLocaleString() : value;                                                                 
-                                return ( <td key={index}>{ value }</td> )
+                                return ( <td key={index}>{ value }</td> );
                             })
                         }
                         {drawActions(product.id)}  

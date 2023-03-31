@@ -1,26 +1,26 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import Layout from "@/components/admin/layout";
-import Head from "next/head";
-import EditForm from "@/components/admin/editForm/editForm";
-import { useState } from "react";
-import Alert from "@/components/alert/alert";
-import { AlertType } from "@/interfaces/alert/alert";
-import Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
+import axios, { AxiosError } from 'axios';
+import Layout from '@/components/admin/layout';
+import Head from 'next/head';
+import EditForm from '@/components/admin/editForm/editForm';
+import { useState } from 'react';
+import Alert from '@/components/alert/alert';
+import { AlertType } from '@/interfaces/alert/alert';
+import Breadcrumbs from '@/components/breadcrumbs/breadcrumbs';
 import { useRouter } from 'next/navigation';
-import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
-import { Tab } from "@/interfaces/tab/tab";
-import { createCategoryDto } from "@/interfaces/category/createCategoryDto";
-import { useMounted } from "@/hooks/useMounted";
-import { Category } from "@/interfaces/category/category";
-import { createOptionsFromArray } from "@/modules/categories/category";
-import Select from "react-select";
-import { theme } from "@/components/inputs/react-select/theme";
+import { VariableTypes } from '@/interfaces/variableTypes/variableTypes';
+import { Tab } from '@/interfaces/tab/tab';
+import { createCategoryDto } from '@/interfaces/category/createCategoryDto';
+import { useMounted } from '@/hooks/useMounted';
+import { Category } from '@/interfaces/category/category';
+import { createOptionsFromArray } from '@/modules/categories/category';
+import Select from 'react-select';
+import { theme } from '@/components/inputs/react-select/theme';
 
 export default function CategoryAdd({ data }: { data: { categories: Category[] } }) {
     const { categories } = data;
     const [resultAlert, setResultAlert] = useState<AlertType>();
     const router = useRouter();
-    const hasMounted = useMounted();    
+    const hasMounted = useMounted();
 
     const [formData, setformData] = useState<createCategoryDto>({
         name: '',
@@ -44,12 +44,12 @@ export default function CategoryAdd({ data }: { data: { categories: Category[] }
         e.preventDefault();
         
         try {
-            const res: AxiosResponse<any, any> = await axios.post(`/api/categories/`, formData, {withCredentials: true});
+            const res = await axios.post(`/api/categories/`, formData, {withCredentials: true});
             
             if (res.status >= 200 && res.status < 300) {
-                router.push(`/admin/categories/${res.data.id}`)
+                router.push(`/admin/categories/${res.data.id}`);
             }
-        } catch (error: any | AxiosError) {
+        } catch (error) {
             if (error instanceof AxiosError) {
                 const { response } = error;
             
@@ -97,7 +97,7 @@ export default function CategoryAdd({ data }: { data: { categories: Category[] }
                 { name: 'description', title: 'description', type: VariableTypes.EDITOR},
             ],
         }
-    ]
+    ];
 
     return (
         <Layout>
@@ -112,12 +112,12 @@ export default function CategoryAdd({ data }: { data: { categories: Category[] }
                 <EditForm onSubmit={handleSubmit} tabs={tabs} formData={formData} onChange={handleChange} />
             </div>
         </Layout>
-    )
+    );
 }
 
 export async function getServerSideProps() {
     const res = await axios.get(`http://localhost:3001/categories/all`, {withCredentials: true});
     const data = { categories: res.data };
     
-    return { props: { data } }
+    return { props: { data } };
 }

@@ -10,7 +10,6 @@ export default function Pagination(props: PaginationProps) {
     siblingCount = 1,
     currentPage,
     pageSize,
-    className
   } = props;
 
   const paginationRange = usePagination({
@@ -32,7 +31,7 @@ export default function Pagination(props: PaginationProps) {
     onPageChange(currentPage - 1);
   };
 
-  let lastPage = paginationRange[paginationRange.length - 1];
+  const lastPage = paginationRange[paginationRange.length - 1];
   return (
     <ul className={styles.container}>
       <li className={`${styles.item} ${currentPage === 1 ? styles.disabled : ''}`} onClick={onPrevious}><div className={`${styles.arrow} ${styles.left}`} /></li>
@@ -42,10 +41,10 @@ export default function Pagination(props: PaginationProps) {
         }
 
         return (
-          <li key={pageNumber} className={`${styles.item} ${pageNumber === currentPage ? styles.selected : ''}`} onClick={() => onPageChange(pageNumber)}>{pageNumber}</li>
+          <li key={pageNumber} className={`${styles.item} ${pageNumber === currentPage ? styles.selected : ''}`} onClick={() => onPageChange(Number(pageNumber))}>{pageNumber}</li>
         );
       })}
       <li className={`${styles.item} ${currentPage === lastPage ? styles.disabled : ''}`} onClick={onNext}><div className={`${styles.arrow} ${styles.right}`}/></li>
     </ul>
   );
-};
+}

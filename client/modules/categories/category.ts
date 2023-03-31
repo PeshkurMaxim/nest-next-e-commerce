@@ -1,5 +1,5 @@
-import { Category } from "@/interfaces/category/category";
-import axios from "axios";
+import { Category } from '@/interfaces/category/category';
+import axios from 'axios';
 
 interface CategoryTree extends Category {
     children?: CategoryTree[]
@@ -12,9 +12,9 @@ export const getCategoriesCount = async () => {
     } catch (err) {
         return console.log(err);
     }
-}
+};
 
-export const getCategories = async (page: number, pageSize: number, sort: string = 'id', order: string = 'ASC', query: any = {}) => {
+export const getCategories = async (page: number, pageSize: number, sort = 'id', order = 'ASC', query: any = {}) => {
     
     try {
         const offset = (page - 1) * pageSize;
@@ -27,7 +27,7 @@ export const getCategories = async (page: number, pageSize: number, sort: string
     }
 
     return [];
-}
+};
 
 export const deleteCategory = async (id: number) => {
     try {
@@ -36,7 +36,7 @@ export const deleteCategory = async (id: number) => {
     } catch {
         return alert('Ошибка удаления');
     }
-}
+};
 
 
 export const createTreeData = (
@@ -53,7 +53,7 @@ export const createTreeData = (
             string += category.name;
             resultArray.push({ value: category.id, label: string});
             string += ' > ';
-            createTreeData(category.children, string, resultArray)
+            createTreeData(category.children, string, resultArray);
         } else {
             string += category.name;
             resultArray.push({ value: category.id, label: string});
@@ -78,10 +78,10 @@ export const makeTree = (arr: Category[]) => {
     });
   
     return tree;
-}
+};
 
 export const createOptionsFromArray = (categories: Category[]) => {
     const categoriesTree = makeTree(categories);    
     const categoriesForSelect = createTreeData(categoriesTree);
     return categoriesForSelect;
-} 
+}; 

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const getProductsCount = async () => {
     try {
@@ -7,9 +7,9 @@ export const getProductsCount = async () => {
     } catch (err) {
         return console.log(err);
     }
-}
+};
 
-export const getProducts = async (page: number, pageSize: number, sort: string = 'id', order: string = 'ASC', query: any = {}) => {
+export const getProducts = async (page: number, pageSize: number, sort = 'id', order = 'ASC', query: any = {}) => {
     
     try {
         const offset = (page - 1) * pageSize;
@@ -22,7 +22,7 @@ export const getProducts = async (page: number, pageSize: number, sort: string =
     }
 
     return [];
-}
+};
 
 export const deleteProduct = async (id: number) => {
     try {
@@ -31,4 +31,4 @@ export const deleteProduct = async (id: number) => {
     } catch {
         return alert('Ошибка удаления');
     }
-}
+};

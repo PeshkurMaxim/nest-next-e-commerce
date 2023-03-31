@@ -5,6 +5,6 @@ export interface PaginationHookProps {
     currentPage: number,
 }
 export interface PaginationProps extends PaginationHookProps {
-    onPageChange: Function,
+    onPageChange: (page: number) => void,
     className: string,
 }

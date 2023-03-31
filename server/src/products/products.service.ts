@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Category } from 'src/categories/entities/category.entity';
+import { DataSource, In, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -13,8 +14,23 @@ export class ProductsService {
     @InjectDataSource() private dataSource: DataSource,
   ) {}
 
-  create(createProductDto: CreateProductDto) {
-    const newProduct = this.productRepository.create(createProductDto);
+  async create(createProductDto: CreateProductDto) {
+    let categories = [];
+
+    if (createProductDto.categoriesIds != null) {
+      categories = await this.dataSource.getRepository(Category).find({
+        where: { id: In(createProductDto.categoriesIds) },
+      });
+    }
+
+    delete createProductDto.categoriesIds;
+
+    const newProductObj = {
+      ...createProductDto,
+      categories,
+    };
+
+    const newProduct = this.productRepository.create(newProductObj);
     return this.productRepository.save(newProduct);
   }
 
@@ -48,17 +64,36 @@ export class ProductsService {
   findOne(id: number) {
     return this.productRepository.findOne({
       where: { id },
-      relations: { categories: true },
     });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return this.dataSource
-      .createQueryBuilder()
-      .update(Product)
-      .set(updateProductDto)
-      .where('id = :id', { id })
-      .execute();
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+      relations: {
+        categories: true,
+      },
+    });
+
+    let categories = [];
+
+    if (updateProductDto.categoriesIds != null) {
+      categories = await this.dataSource.getRepository(Category).find({
+        where: { id: In(updateProductDto.categoriesIds) },
+      });
+    }
+
+    delete updateProductDto.categoriesIds;
+    delete product.categories;
+
+    const updatedProductObj = {
+      ...product,
+      ...updateProductDto,
+      categories: categories,
+    };
+
+    const updatedProduct = this.productRepository.create(updatedProductObj);
+    return this.productRepository.save(updatedProduct);
   }
 
   remove(id: number) {

@@ -19,8 +19,6 @@ export default function CategoryEdit({ data }: { data: { category: Category, cat
     const [formData, setformData] = useState(category);
     const [resultAlert, setResultAlert] = useState<AlertType>();
     const hasMounted = useMounted();
-    console.log(category);
-    
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {                
         setformData({
@@ -120,7 +118,7 @@ export async function getServerSideProps({ params } : { params ?: any }) {
         const values = await Promise.all([category, categories])
         data['category'] = values[0].data;
         data['categories'] = values[1].data;
-    } catch (error: any | AxiosError) {
+    } catch (error: any | AxiosError) {        
         if (error instanceof AxiosError) {
             const { response } = error;
             console.log(response?.data.message);

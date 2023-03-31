@@ -1,19 +1,19 @@
-import axios from "axios";
-import Layout from "@/components/admin/layout";
-import { Product } from "@/interfaces/product/product";
-import List from "@/components/admin/List/list";
-import Head from "next/head";
-import Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
-import CreateButton from "@/components/buttons/create/createButton";
-import { useEffect, useState, useTransition } from "react";
-import Pagination from "@/components/pagination/pagination";
-import Loader from "@/components/loader/loader";
-import { deleteProduct, getProducts, getProductsCount } from "@/modules/products/product";
-import Filter from "@/components/admin/filter/filter";
-import { VariableTypes } from "@/interfaces/variableTypes/variableTypes";
-import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import { Column } from "@/interfaces/column/column";
+import axios from 'axios';
+import Layout from '@/components/admin/layout';
+import { Product } from '@/interfaces/product/product';
+import List from '@/components/admin/List/list';
+import Head from 'next/head';
+import Breadcrumbs from '@/components/breadcrumbs/breadcrumbs';
+import CreateButton from '@/components/buttons/create/createButton';
+import { useEffect, useState, useTransition } from 'react';
+import Pagination from '@/components/pagination/pagination';
+import Loader from '@/components/loader/loader';
+import { deleteProduct, getProducts, getProductsCount } from '@/modules/products/product';
+import Filter from '@/components/admin/filter/filter';
+import { VariableTypes } from '@/interfaces/variableTypes/variableTypes';
+import { useRouter } from 'next/router';
+import { ParsedUrlQuery } from 'querystring';
+import { Column } from '@/interfaces/column/column';
 
 const PAGE_SIZE = 20;
 
@@ -33,7 +33,7 @@ const filterCollumns: Column<Product>[] = [
 export default function Products({ data }: { data: Product[]}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentTableData, setCurrentTableData] = useState(data);
-    const [totalProductsCount, setTotalProductsCount] = useState(0)
+    const [totalProductsCount, setTotalProductsCount] = useState(0);
     const [isPending, startTransition] = useTransition();
     const [sortField, setSortField] = useState("id");
     const [order, setOrder] = useState("ASC");
@@ -45,28 +45,28 @@ export default function Products({ data }: { data: Product[]}) {
             getProductsCount()
             .then((data) => {
                 setTotalProductsCount(data);
-            })
+            });
         });        
-    }, [])
+    }, []);
 
     const pageChangeHandler = (page: number) => {
         startTransition(() => {
             getProducts(currentPage, PAGE_SIZE, sortField, order, query).then( (newData) => {                    
                 setCurrentTableData(newData);
                 setCurrentPage(page);
-            })
+            });
         });        
-    }
+    };
 
     const onDelete = (id: number) => {
         deleteProduct(id).then( () => {
             startTransition(() => {
                 getProducts(currentPage, PAGE_SIZE, sortField, order, query).then( (newData) => {                    
                     setCurrentTableData(newData);
-                })
+                });
             }); 
-        })
-    }
+        });
+    };
 
     const onSort = (key: string) => {
         const sortOrder = key === sortField && order === "ASC" ? "DESC" : "ASC";
@@ -75,17 +75,17 @@ export default function Products({ data }: { data: Product[]}) {
         startTransition(() => {
             getProducts(currentPage, PAGE_SIZE, key, sortOrder, query).then( (newData) => {                    
                 setCurrentTableData(newData);
-            })
+            });
         }); 
-    }
+    };
 
     const onFilter = (newQuery: ParsedUrlQuery) => {        
         startTransition(() => {
             getProducts(currentPage, PAGE_SIZE, sortField, order, newQuery).then( (newData) => {                    
                 setCurrentTableData(newData);
-            })
+            });
         }); 
-    }
+    };
 
     return (
         <Layout>
@@ -121,7 +121,7 @@ export default function Products({ data }: { data: Product[]}) {
                 </Loader>
             </div>
         </Layout>
-    )
+    );
 }
 
 export async function getServerSideProps() {
@@ -129,6 +129,6 @@ export async function getServerSideProps() {
     const data =  res.data;
     
     
-    return { props: { data } }
+    return { props: { data } };
 }
   
