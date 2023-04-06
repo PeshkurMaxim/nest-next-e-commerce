@@ -1,0 +1,51 @@
+.main_container {
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.input_container {
+    height: 75px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    color: #00000094;
+    border-bottom: 1px solid #ddd;
+    border-radius: 5px;
+}
+.input {
+    display: none !important;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 150px);
+    gap: 10px;
+    margin: 10px;
+}
+.delete {
+    width: 100%;
+    background: #ddd;
+    transition: color 0.3s, background-color 0.3s;
+}
+.delete:hover {
+    color: #fff;
+    background-color: #000;
+}
+.grid_item {
+    cursor: pointer;
+    height: 175px;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    border-radius: 5px;
+}
+.image_container {
+    padding: 5px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

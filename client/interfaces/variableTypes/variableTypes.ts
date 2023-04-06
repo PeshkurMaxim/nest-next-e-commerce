@@ -13,6 +13,7 @@ export enum VariableTypes {
     READONLYDATETIME = 'READONLYDATETIME',
     CHECKBOX = 'CHECKBOX',
     FILE = 'FILE',
+    FILES = 'FILES',
     CUSTOM = 'CUSTOM',
 }
 export const VariableTypesToComponent = {
@@ -23,4 +24,5 @@ export const VariableTypesToComponent = {
     READONLYDATETIME: ReadonlyDatetime,
     CHECKBOX: CheckboxInput,
     FILE: '',
+    FILES: '',
 };
