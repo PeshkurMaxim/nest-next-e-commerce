@@ -1,4 +1,5 @@
-import { Entity, JoinTable, ManyToMany, RelationId } from 'typeorm';
+import { Entity, JoinTable, ManyToMany, OneToMany, RelationId } from 'typeorm';
+import { ProductImage } from './product-image.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { SeoShopBaseEntity } from 'src/common/BaseEntities/SeoShopBaseEntity';
 import { ApiProperty } from '@nestjs/swagger';
@@ -12,4 +13,10 @@ export class Product extends SeoShopBaseEntity {
 
   @RelationId((product: Product) => product.categories)
   categoriesIds: number[];
+
+  @ApiProperty()
+  @OneToMany(() => ProductImage, (image) => image.product, {
+    cascade: true,
+  })
+  images: ProductImage[];
 }
